@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import {persistStore,persistReducer} from 'redux-persist';
 import {AsyncStorage} from 'react-native';
+import { composeWithDevTools } from 'remote-redux-devtools';
   
     
 const persistConfig={
@@ -16,8 +17,9 @@ const persistedReducer = persistReducer(persistConfig,rootReducer)
 
 export const store = createStore(
         persistedReducer,
+        composeWithDevTools(
         applyMiddleware(...middleware)
-    
+        )
     );
 
     

@@ -1,3 +1,4 @@
 export const GET_CONTENT = 'GET_CONTENT';
 export const ADD_FAVORITE = 'ADD_FAVORITE';
 export const GET_FAVORITE= 'GET_FAVORITE'
+export const REMOVE_FAVORITE= 'REMOVE_FAVORITE'

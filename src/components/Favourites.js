@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View,FlatList } from 'react-native';
+import { StyleSheet, FlatList,WebView } from 'react-native';
 import {connect} from 'react-redux';
-import { getFavorites } from '../actions/newsAction';
+import { getFavorites,removeFavorite } from '../actions/newsAction';
 import Spinner from './common/Spinner'
 
 import NewsLayout from './NewsLayout';
@@ -13,14 +13,37 @@ class Favourites extends React.Component {
         super(props);
 
         this.state={
-            con:[],
+            favorites:[],
             url:""
         }
+
+        this.onClick = this.onClick.bind(this);   
+        this.favoriteClick = this.favoriteClick.bind(this);
     }
 
     componentDidMount(){
         this.props.getFavorites()
     }
+
+    componentWillReceiveProps(nextProps){
+  
+      if(nextProps.favorites){
+        this.setState({favorites:nextProps.favorites.favorites})
+      }
+      
+  }
+
+  favoriteClick(img,title,content,url,favorite){
+
+    if(favorite){
+      this.props.removeFavorite(title)
+    }
+  }
+
+  onClick(e){
+    this.setState({url:e});
+  }
+  
   
   render() {
       
@@ -34,17 +57,18 @@ class Favourites extends React.Component {
     }else{
 
       return (
-        this.state.con && this.state.con.length>0?
+        this.state.favorites && this.state.favorites.length>0?
          <FlatList
-         data={this.state.con}
+         data={this.state.favorites}
          renderItem={({item}) => 
              <NewsLayout 
-             img={item.urlToImage} 
+             img={item.image} 
              title = {item.title} 
              desc={item.content}
              onClick={this.onClick}
              url={item.url}
              favoriteClick={this.favoriteClick}
+             favorite = {this.state.favorites.some(i => i.title === item.title)}
              />
            }
              />
@@ -69,7 +93,7 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps =(state) => ({
-    favorites:state.favorites
+    favorites:state.news
 })
 
-export default connect(mapStateToProps,{getFavorites})(Favourites);
+export default connect(mapStateToProps,{getFavorites,removeFavorite})(Favourites);

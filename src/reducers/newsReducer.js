@@ -1,7 +1,7 @@
-import { GET_CONTENT,ADD_FAVORITE,GET_FAVORITE } from '../actions/types';
+import { GET_CONTENT,ADD_FAVORITE,GET_FAVORITE ,REMOVE_FAVORITE} from '../actions/types';
 
 const initalState={
-    content:"",
+    content:[],
     favorites:[]
 }
 
@@ -12,15 +12,24 @@ export default function(state=initalState,action){
                 ...state,
                 content:action.payload
             }
-            case ADD_FAVORITE:
+            
+        case ADD_FAVORITE: 
+                
             return { 
                 ...state,
-                favorites: [...state.favorites, action.payload]
+                favorites: [action.payload, ...state.favorites]
             }
-            case ADD_FAVORITE:
+
+        case REMOVE_FAVORITE: 
+        return { 
+                ...state,
+                favorites: state.favorites.filter(i => i.title !== action.payload.title),
+            }
+            
+        case GET_FAVORITE:
                     return{
                         ...state,
-                        favorites:action.payload
+                        favorites:[...state.favorites]
                     }         
         default:
             return state;
